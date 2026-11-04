@@ -1,44 +1,14 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#include "../include/vector.h"
 
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stddef.h>
-  
-#define VEC_INIT_CAPACITY 16
-#define new_vector(data_type) (vector) { \
-  .data      = NULL,                     \
-  .data_size = sizeof(data_type),        \
-  .at        = vector_at,                \
-  .size      = 0,                        \
-  .capacity  = 0,                        \
-  .reserve   = vector_reserve,           \
-  .push_back = vector_push_back,         \
-  .pop_back  = vector_pop_back,          \
-};                                       \
-
-typedef struct vector_impl vector;
-
-struct vector_impl {
-  void *data;
-  size_t data_size;
-  // Element access
-  void *(*at)(vector *vec, size_t index);
-  // Capacity
-  size_t size;
-  size_t capacity;
-  void (*reserve)(vector *vec, size_t expect_capacity);
-  // Modifiers
-  void (*push_back)(vector *vec, void *elements);
-  void (*pop_back)(vector *vec);
-};
-
-void *vector_at(vector *vec, size_t index)
+void *vector_at(const vector *vec, size_t index)
 {
   assert(index < vec->size);
   return (char *)(vec->data + vec->data_size * index);
+}
+
+size_t max_size(const vector *vec)
+{
+  return SIZE_MAX / (2 *vec->data_size);
 }
 
 void vector_reserve(vector *vec, size_t capacity)
@@ -78,5 +48,3 @@ void vector_pop_back(vector *vec)
   assert(vec->size > 0);
   vec->size--;
 }
-
-#endif

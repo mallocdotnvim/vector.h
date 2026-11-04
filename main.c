@@ -1,23 +1,24 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "vector.h"
+#include "include/vector.h"
 
 int main(void)
 {
-  vector vec = new_vector(int);
+  vector vec = new_vector(long long);
+  vec.reserve(&vec, 1000000);
   
-  vec.reserve(&vec, 10);
+  assert(vec.max_size(&vec) == 1152921504606846975);
+  assert(vec.capacity == 1000000);
   
-  assert(vec.capacity == 10);
-  
-  for (size_t i = 0; i < 10; i++) {
+  for (size_t i = 0; i < vec.capacity; i++) {
     vec.push_back(&vec, &i);
   }
-  vec.pop_back(&vec);
-  assert(vec.size == 9);
+
+  long long sum = 0;
   for (size_t i = 0; i < vec.size; i++) {
-    printf("%d\n", *(int *)vec.at(&vec, i));
+    sum += *(long long *)vec.at(&vec, i);
   }
+  printf("%lld\n", sum);
   return 0;
 }
